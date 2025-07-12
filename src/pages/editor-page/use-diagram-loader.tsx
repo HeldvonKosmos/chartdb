@@ -55,13 +55,13 @@ export const useDiagramLoader = () => {
                     return;
                 }
             }
-            const diagrams = await listDiagrams();
+            // const diagrams = await listDiagrams();
 
-            if (diagrams.length > 0) {
-                openOpenDiagramDialog({ canClose: false });
-            } else {
-                openCreateDiagramDialog();
-            }
+            // if (diagrams.length > 0) {
+            //     openOpenDiagramDialog({ canClose: false });
+            // } else {
+            //     openCreateDiagramDialog();
+            // }
         };
 
         if (

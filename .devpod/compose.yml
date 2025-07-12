@@ -1,0 +1,12 @@
+services:
+  chartdb-pod:
+    container_name: chartdb-pod
+    image: node:lts
+    privileged: true
+    volumes:
+      - ../:/app
+      - ./entrypoint.sh:/usr/local/bin/entrypoint.sh
+    working_dir: /app
+    entrypoint: /usr/local/bin/entrypoint.sh
+    command: npm run dev
+    network_mode: host
