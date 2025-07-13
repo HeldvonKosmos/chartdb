@@ -41,7 +41,7 @@ export const useDiagramLoader = () => {
                     await addDiagram({ diagram });
                     const init_diagram = await loadDiagram(diagram.id);
                     setInitialDiagram(init_diagram);
-                    navigate(`/diagrams/${diagram.id}`);
+                    //navigate(`/diagrams/${diagram.id}`);
                 } catch (error) {
                     console.error('Failed to auto-load diagram from JSON API:', error);
                     openCreateDiagramDialog({ canClose: false });
