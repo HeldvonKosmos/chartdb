@@ -12,3 +12,14 @@ export const HIDE_CHARTDB_CLOUD: boolean =
 export const DISABLE_ANALYTICS: boolean =
     (window?.env?.DISABLE_ANALYTICS ??
         import.meta.env.VITE_DISABLE_ANALYTICS) === 'true';
+
+// Auto SQL loading configuration
+export const AUTO_LOAD_JSON: boolean =
+    (window?.env?.AUTO_LOAD_JSON ??
+        import.meta.env.VITE_AUTO_LOAD_JSON) === 'true';
+export const AUTO_LOAD_DATABASE_TYPE: string =
+    window?.env?.AUTO_LOAD_DATABASE_TYPE ??
+    import.meta.env.VITE_AUTO_LOAD_DATABASE_TYPE ?? 'GENERIC';
+export const AUTO_LOAD_API_ENDPOINT: string =
+    window?.env?.AUTO_LOAD_API_ENDPOINT ??
+    import.meta.env.VITE_AUTO_LOAD_API_ENDPOINT ?? '';
