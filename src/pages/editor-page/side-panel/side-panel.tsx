@@ -60,13 +60,13 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
     );
 
     return (
-        <aside className="flex h-full flex-col overflow-hidden">
+        <aside className="flex overflow-hidden flex-col h-full">
             {schemasOptions.length > 0 ? (
                 <div className="flex items-center justify-center border-b pl-3 pt-0.5">
-                    <div className="shrink-0 text-sm font-semibold">
+                    <div className="text-sm font-semibold shrink-0">
                         {t('side_panel.schema')}
                     </div>
-                    <div className="flex min-w-0 flex-1">
+                    <div className="flex flex-1 min-w-0">
                         <SelectBox
                             oneLine
                             className="w-full rounded-none border-none"
@@ -96,7 +96,7 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                             selectSidebarSection(value as SidebarSection)
                         }
                     >
-                        <SelectTrigger className="rounded-none border-none font-semibold shadow-none hover:bg-secondary hover:underline focus:border-transparent focus:ring-0">
+                        <SelectTrigger className="font-semibold rounded-none border-none shadow-none hover:bg-secondary hover:underline focus:border-transparent focus:ring-0">
                             <SelectValue />
                             <div className="flex flex-1 justify-end px-2 text-xs font-normal text-muted-foreground">
                                 {t('side_panel.view_all_options')}
