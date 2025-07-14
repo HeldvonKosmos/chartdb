@@ -10,7 +10,6 @@ import type { DBIndex } from '@/lib/domain/db-index';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { useStorage } from '@/hooks/use-storage';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
-import type { Diagram } from '@/lib/domain/diagram';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import type { DBSchema } from '@/lib/domain/db-schema';
 import {
@@ -29,6 +28,15 @@ import {
     DBCustomTypeKind,
     type DBCustomType,
 } from '@/lib/domain/db-custom-type';
+import {
+    AUTO_LOAD_API_ENDPOINT,
+    AUTO_LOAD_JSON,
+    AUTO_LOAD_SQL_API_ENDPOINT,
+} from '@/lib/env';
+import { useToast } from '@/components/toast/use-toast';
+import { shouldShowTablesBySchemaFilter } from '@/lib/domain/db-table';
+import { exportBaseSQL, exportSQL } from '@/lib/data/export-metadata/export-sql-script';
+import type { Diagram } from '@/lib/domain/diagram';
 
 export interface ChartDBProviderProps {
     diagram?: Diagram;
@@ -40,6 +48,7 @@ export const ChartDBProvider: React.FC<
 > = ({ children, diagram, readonly: readonlyProp }) => {
     const { hasDiff } = useDiff();
     let db = useStorage();
+    const { toast } = useToast();
     const events = useEventEmitter<ChartDBEvent>();
     const { setSchemasFilter, schemasFilter } = useLocalConfig();
     const { addUndoAction, resetRedoStack, resetUndoStack } =
@@ -100,24 +109,24 @@ export const ChartDBProvider: React.FC<
         () =>
             databasesWithSchemas.includes(databaseType)
                 ? [
-                      ...new Set(
-                          tables
-                              .map((table) => table.schema)
-                              .filter((schema) => !!schema) as string[]
-                      ),
-                  ]
-                      .sort((a, b) =>
-                          a === defaultSchemaName ? -1 : a.localeCompare(b)
-                      )
-                      .map(
-                          (schema): DBSchema => ({
-                              id: schemaNameToSchemaId(schema),
-                              name: schema,
-                              tableCount: tables.filter(
-                                  (table) => table.schema === schema
-                              ).length,
-                          })
-                      )
+                    ...new Set(
+                        tables
+                            .map((table) => table.schema)
+                            .filter((schema) => !!schema) as string[]
+                    ),
+                ]
+                    .sort((a, b) =>
+                        a === defaultSchemaName ? -1 : a.localeCompare(b)
+                    )
+                    .map(
+                        (schema): DBSchema => ({
+                            id: schemaNameToSchemaId(schema),
+                            name: schema,
+                            tableCount: tables.filter(
+                                (table) => table.schema === schema
+                            ).length,
+                        })
+                    )
                 : [],
         [tables, defaultSchemaName, databaseType]
     );
@@ -235,6 +244,119 @@ export const ChartDBProvider: React.FC<
                 attributes: { updatedAt },
             });
         }, [db, diagramId, setDiagramUpdatedAt]);
+
+    const saveDiagram: ChartDBContext['saveDiagram'] = useCallback(async () => {
+        if (AUTO_LOAD_JSON) {
+            const saveJsonPromise = fetch(AUTO_LOAD_API_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(currentDiagram),
+            });
+
+            const filteredDiagram: Diagram = {
+                ...currentDiagram,
+                tables: currentDiagram.tables?.filter((table) =>
+                    shouldShowTablesBySchemaFilter(table, filteredSchemas)
+                ),
+                relationships: currentDiagram.relationships?.filter((rel) => {
+                    const sourceTable = currentDiagram.tables?.find(
+                        (t) => t.id === rel.sourceTableId
+                    );
+                    const targetTable = currentDiagram.tables?.find(
+                        (t) => t.id === rel.targetTableId
+                    );
+                    return (
+                        sourceTable &&
+                        targetTable &&
+                        shouldShowTablesBySchemaFilter(
+                            sourceTable,
+                            filteredSchemas
+                        ) &&
+                        shouldShowTablesBySchemaFilter(
+                            targetTable,
+                            filteredSchemas
+                        )
+                    );
+                }),
+                dependencies: currentDiagram.dependencies?.filter((dep) => {
+                    const table = currentDiagram.tables?.find(
+                        (t) => t.id === dep.tableId
+                    );
+                    const dependentTable = currentDiagram.tables?.find(
+                        (t) => t.id === dep.dependentTableId
+                    );
+                    return (
+                        table &&
+                        dependentTable &&
+                        shouldShowTablesBySchemaFilter(table, filteredSchemas) &&
+                        shouldShowTablesBySchemaFilter(
+                            dependentTable,
+                            filteredSchemas
+                        )
+                    );
+                }),
+            };
+
+            const saveSqlPromise = (async () => {
+                let sqlScript: string;
+                if (currentDiagram.databaseType === DatabaseType.GENERIC) {
+                    sqlScript = exportBaseSQL({
+                        diagram: filteredDiagram,
+                        targetDatabaseType: currentDiagram.databaseType,
+                    });
+                } else {
+                    sqlScript = await exportSQL(
+                        filteredDiagram,
+                        currentDiagram.databaseType
+                    );
+                }
+
+                return fetch(AUTO_LOAD_SQL_API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain',
+                    },
+                    body: sqlScript,
+                });
+            })();
+
+            try {
+                const [jsonResponse, sqlResponse] = await Promise.all([
+                    saveJsonPromise,
+                    saveSqlPromise,
+                ]);
+
+                if (!jsonResponse.ok) {
+                    throw new Error(
+                        `JSON API request failed: ${jsonResponse.statusText}`
+                    );
+                }
+                if (!sqlResponse.ok) {
+                    throw new Error(
+                        `SQL API request failed: ${sqlResponse.statusText}`
+                    );
+                }
+
+                toast({
+                    title: 'Diagram Saved',
+                    description:
+                        'Your diagram has been successfully saved to the server (JSON and SQL).',
+                });
+                await updateDiagramUpdatedAt();
+            } catch (error) {
+                console.error('Failed to save diagram to API:', error);
+                toast({
+                    title: 'Save Failed',
+                    description: `Could not save the diagram to the server. ${error instanceof Error ? error.message : ''}`,
+                    variant: 'destructive',
+                });
+            }
+        } else {
+            await updateDiagramUpdatedAt();
+        }
+    }, [currentDiagram, toast, updateDiagramUpdatedAt, filteredSchemas]);
 
     const updateDatabaseType: ChartDBContext['updateDatabaseType'] =
         useCallback(
@@ -1730,6 +1852,7 @@ export const ChartDBProvider: React.FC<
                 filterSchemas,
                 updateDiagramId,
                 updateDiagramName,
+                saveDiagram,
                 loadDiagram,
                 loadDiagramFromData,
                 updateDatabaseType,

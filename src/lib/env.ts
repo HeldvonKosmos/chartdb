@@ -20,3 +20,9 @@ export const AUTO_LOAD_JSON: boolean =
 export const AUTO_LOAD_API_ENDPOINT: string =
     window?.env?.AUTO_LOAD_API_ENDPOINT ??
     import.meta.env.VITE_AUTO_LOAD_API_ENDPOINT ?? '';
+export const DATABASE_TYPE: string =
+    window?.env?.DATABASE_TYPE ??
+    import.meta.env.VITE_DATABASE_TYPE ?? '';
+export const AUTO_LOAD_SQL_API_ENDPOINT: string =
+    window?.env?.AUTO_LOAD_SQL_API_ENDPOINT ??
+    import.meta.env.VITE_AUTO_LOAD_SQL_API_ENDPOINT ?? '';
