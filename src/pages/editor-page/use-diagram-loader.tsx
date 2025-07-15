@@ -90,10 +90,10 @@ export const useDiagramLoader = () => {
                     hideLoader();
 
                     return;
-                } else if (!diagramId && config.defaultDiagramId) {
-                    const diagram = await loadDiagram(config.defaultDiagramId);
+                } else if (!diagramId && config?.defaultDiagramId) {
+                    const diagram = await loadDiagram(config?.defaultDiagramId);
                     if (diagram) {
-                        navigate(`/diagrams/${config.defaultDiagramId}`);
+                        navigate(`/diagrams/${config?.defaultDiagramId}`);
 
                         return;
                     }

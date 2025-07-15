@@ -39,7 +39,6 @@ spec/
 *.swo
 *.DS_Store
 *.log
-*.lock
 *.tmp
 
 # Ignore coverage output

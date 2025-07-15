@@ -47,6 +47,11 @@
 ChartDB is a powerful, web-based database diagramming editor.
 Instantly visualize your database schema with a single **"Smart Query."** Customize diagrams, export SQL scripts, and access all features—no account required. Experience seamless database design here.
 
+### What this fork is about
+
+This fork adds a dev container and let the container define env variables. Also it loads the json to render the chart from api endpoint to integrate it into laravel-stack. 
+
+
 **What it does**:
 
 - **Instant Schema Import**
@@ -78,35 +83,35 @@ Use the [cloud version](https://app.chartdb.io?ref=github_readme_2) or deploy lo
 ### How To Use
 
 ```bash
-npm install
-npm run dev
+yarn install
+yarn run dev
 ```
 
 ### Build
 
 ```bash
-npm install
-npm run build
+yarn install
+yarn run build
 ```
 
 Or like this if you want to have AI capabilities:
 
 ```bash
-npm install
-VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
+yarn install
+VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> yarn run build
 ```
 
 ### Run the Docker Container
 
 ```bash
-docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 ghcr.io/chartdb/chartdb:latest
+podman run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 ghcr.io/chartdb/chartdb:latest
 ```
 
 #### Build and Run locally
 
 ```bash
-docker build -t chartdb .
-docker run -p 8080:80 \
+podman build -t chartdb .
+podman run -p 8080:80 \
   -e VITE_OPENAI_API_KEY="your_openai_api_key_here" \
   -e VITE_OPENAI_API_ENDPOINT="https://api.openai.com/v1" \
   -e VITE_LLM_MODEL_NAME="gpt-3.5-turbo" \
@@ -116,7 +121,16 @@ docker run -p 8080:80 \
   -e VITE_AUTO_LOAD_API_ENDPOINT="http://127.0.0.1:8000/api/drawdb" \
   -e VITE_DATABASE_TYPE="postgresql" \
   --name chartdb-pod \
-  localhost/chartdb:latest
+  ghcr.io/heldvonkosmos/chartdb:latest
+
+```
+
+#### Push image to github container images
+
+```bash
+podman login ghcr.io -u YOUR_GITHUB_USERNAME
+podman build -t ghcr.io/your-username/chartdb:latest .
+podman push ghcr.io/your-username/chartdb:latest
 ```
 
 > **Privacy Note:** ChartDB includes privacy-focused analytics via Fathom Analytics. You can disable this by adding `-e DISABLE_ANALYTICS=true` to the run command or `--build-arg VITE_DISABLE_ANALYTICS=true` when building.

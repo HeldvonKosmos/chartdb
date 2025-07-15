@@ -1,11 +1,10 @@
 # Stage 1: Bauen der React-Anwendung
 FROM node:22-alpine AS builder
-RUN npm install --global yarn
 
 WORKDIR /usr/src/app
 
-COPY package.json ./
-RUN npm ci
+COPY package.json yarn.lock ./
+RUN yarn install
 
 COPY . .
 
