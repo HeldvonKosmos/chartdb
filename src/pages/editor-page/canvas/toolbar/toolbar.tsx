@@ -65,7 +65,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
     return (
         <div className="px-1">
             <Card className="h-[44px] bg-secondary p-0 shadow-none">
-                <CardContent className="flex flex-row items-center p-1 h-full">
+                <CardContent className="flex h-full flex-row items-center p-1">
                     {!readonly ? (
                         <>
                             <Tooltip>
@@ -98,7 +98,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
                                     onClick={showAll}
                                     className={
                                         isLostInCanvas
-                                            ? 'text-white bg-pink-500 hover:bg-pink-600 hover:text-white'
+                                            ? 'bg-pink-500 text-white hover:bg-pink-600 hover:text-white'
                                             : ''
                                     }
                                 >

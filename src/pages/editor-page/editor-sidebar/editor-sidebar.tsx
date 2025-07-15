@@ -103,36 +103,34 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 active: selectedSidebarSection === 'areas',
             },
             ...(dependencies && dependencies.length > 0
-                ? 
-                [
-                    {
-                        title: t(
-                            'side_panel.dependencies_section.dependencies'
-                        ),
-                        icon: SquareStack,
-                        onClick: () => {
-                            showSidePanel();
-                            selectSidebarSection('dependencies');
-                        },
-                        active: selectedSidebarSection === 'dependencies',
-                    },
-                ]
+                ? [
+                      {
+                          title: t(
+                              'side_panel.dependencies_section.dependencies'
+                          ),
+                          icon: SquareStack,
+                          onClick: () => {
+                              showSidePanel();
+                              selectSidebarSection('dependencies');
+                          },
+                          active: selectedSidebarSection === 'dependencies',
+                      },
+                  ]
                 : []),
             ...(databaseType === DatabaseType.POSTGRESQL
-                ? 
-                [
-                    {
-                        title: t(
-                            'side_panel.custom_types_section.custom_types'
-                        ),
-                        icon: FileType,
-                        onClick: () => {
-                            showSidePanel();
-                            selectSidebarSection('customTypes');
-                        },
-                        active: selectedSidebarSection === 'customTypes',
-                    },
-                ]
+                ? [
+                      {
+                          title: t(
+                              'side_panel.custom_types_section.custom_types'
+                          ),
+                          icon: FileType,
+                          onClick: () => {
+                              showSidePanel();
+                              selectSidebarSection('customTypes');
+                          },
+                          active: selectedSidebarSection === 'customTypes',
+                      },
+                  ]
                 : []),
         ],
         [
@@ -206,24 +204,24 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                     <SidebarGroupContent>
                         {!AUTO_LOAD_JSON && (
                             <>
-                            <SidebarMenu>
-                                {diagramItems.map((item) => (
-                                    <SidebarMenuItem key={item.title}>
-                                        <SidebarMenuButton
-                                            className="hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
-                                            isActive={item.active}
-                                            asChild
-                                            tooltip={item.title}
-                                        >
-                                            <button onClick={item.onClick}>
-                                                <item.icon />
-                                                <span>{item.title}</span>
-                                            </button>
-                                        </SidebarMenuButton>
-                                    </SidebarMenuItem>
-                                ))}
-                            </SidebarMenu>
-                            <Separator className="my-2" />
+                                <SidebarMenu>
+                                    {diagramItems.map((item) => (
+                                        <SidebarMenuItem key={item.title}>
+                                            <SidebarMenuButton
+                                                className="hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
+                                                isActive={item.active}
+                                                asChild
+                                                tooltip={item.title}
+                                            >
+                                                <button onClick={item.onClick}>
+                                                    <item.icon />
+                                                    <span>{item.title}</span>
+                                                </button>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    ))}
+                                </SidebarMenu>
+                                <Separator className="my-2" />
                             </>
                         )}
                         <SidebarMenu>

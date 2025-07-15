@@ -1,34 +1,31 @@
+# Stage 1: Bauen der React-Anwendung
 FROM node:22-alpine AS builder
-
-ARG VITE_OPENAI_API_KEY
-ARG VITE_OPENAI_API_ENDPOINT
-ARG VITE_LLM_MODEL_NAME
-ARG VITE_HIDE_CHARTDB_CLOUD
-ARG VITE_DISABLE_ANALYTICS
 
 WORKDIR /usr/src/app
 
 COPY package.json package-lock.json ./
-
 RUN npm ci
 
 COPY . .
 
-RUN echo "VITE_OPENAI_API_KEY=${VITE_OPENAI_API_KEY}" > .env && \
-    echo "VITE_OPENAI_API_ENDPOINT=${VITE_OPENAI_API_ENDPOINT}" >> .env && \
-    echo "VITE_LLM_MODEL_NAME=${VITE_LLM_MODEL_NAME}" >> .env && \
-    echo "VITE_HIDE_CHARTDB_CLOUD=${VITE_HIDE_CHARTDB_CLOUD}" >> .env && \
-    echo "VITE_DISABLE_ANALYTICS=${VITE_DISABLE_ANALYTICS}" >> .env
-
+# Der Build-Prozess ist jetzt komplett konfigurationsfrei.
 RUN npm run build
 
+# Stage 2: Produktions-Image mit Nginx
 FROM nginx:stable-alpine AS production
 
+# Kopiere die gebaute Anwendung aus dem Builder-Stage
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
+
+# Kopiere die Konfigurations-Vorlage, die vom Entrypoint verwendet wird
+COPY ./config.template.js /usr/share/nginx/html/config.template.js
+
+# Kopiere die Nginx-Konfiguration und das neue Entrypoint-Skript
 COPY ./default.conf.template /etc/nginx/conf.d/default.conf.template
-COPY entrypoint.sh /entrypoint.sh
+COPY ./entrypoint.prod.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 80
 
+# Das Entrypoint-Skript wird beim Starten des Containers ausgeführt
 ENTRYPOINT ["/entrypoint.sh"]

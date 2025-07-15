@@ -35,7 +35,10 @@ import {
 } from '@/lib/env';
 import { useToast } from '@/components/toast/use-toast';
 import { shouldShowTablesBySchemaFilter } from '@/lib/domain/db-table';
-import { exportBaseSQL, exportSQL } from '@/lib/data/export-metadata/export-sql-script';
+import {
+    exportBaseSQL,
+    exportSQL,
+} from '@/lib/data/export-metadata/export-sql-script';
 import type { Diagram } from '@/lib/domain/diagram';
 
 export interface ChartDBProviderProps {
@@ -109,24 +112,24 @@ export const ChartDBProvider: React.FC<
         () =>
             databasesWithSchemas.includes(databaseType)
                 ? [
-                    ...new Set(
-                        tables
-                            .map((table) => table.schema)
-                            .filter((schema) => !!schema) as string[]
-                    ),
-                ]
-                    .sort((a, b) =>
-                        a === defaultSchemaName ? -1 : a.localeCompare(b)
-                    )
-                    .map(
-                        (schema): DBSchema => ({
-                            id: schemaNameToSchemaId(schema),
-                            name: schema,
-                            tableCount: tables.filter(
-                                (table) => table.schema === schema
-                            ).length,
-                        })
-                    )
+                      ...new Set(
+                          tables
+                              .map((table) => table.schema)
+                              .filter((schema) => !!schema) as string[]
+                      ),
+                  ]
+                      .sort((a, b) =>
+                          a === defaultSchemaName ? -1 : a.localeCompare(b)
+                      )
+                      .map(
+                          (schema): DBSchema => ({
+                              id: schemaNameToSchemaId(schema),
+                              name: schema,
+                              tableCount: tables.filter(
+                                  (table) => table.schema === schema
+                              ).length,
+                          })
+                      )
                 : [],
         [tables, defaultSchemaName, databaseType]
     );
@@ -290,7 +293,10 @@ export const ChartDBProvider: React.FC<
                     return (
                         table &&
                         dependentTable &&
-                        shouldShowTablesBySchemaFilter(table, filteredSchemas) &&
+                        shouldShowTablesBySchemaFilter(
+                            table,
+                            filteredSchemas
+                        ) &&
                         shouldShowTablesBySchemaFilter(
                             dependentTable,
                             filteredSchemas
