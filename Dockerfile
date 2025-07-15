@@ -1,15 +1,16 @@
 # Stage 1: Bauen der React-Anwendung
 FROM node:22-alpine AS builder
+RUN npm install --global yarn
 
 WORKDIR /usr/src/app
 
-COPY package.json package-lock.json ./
+COPY package.json ./
 RUN npm ci
 
 COPY . .
 
 # Der Build-Prozess ist jetzt komplett konfigurationsfrei.
-RUN npm run build
+RUN yarn run build
 
 # Stage 2: Produktions-Image mit Nginx
 FROM nginx:stable-alpine AS production
