@@ -6,21 +6,8 @@ services:
       context: .
       no_cache: true
     privileged: true
-    environment:
-      - GIT_USER_NAME="HeldvonKosmos"
-      - GIT_USER_EMAIL=jonas-groth@web.de
-      - VITE_OPENAI_API_KEY=your_dev_key_here
-      - VITE_OPENAI_API_ENDPOINT=https://api.openai.com/v1
-      - VITE_LLM_MODEL_NAME=gpt-3.5-turbo
-      - VITE_IS_CHARTDB_IO=false
-      - VITE_APP_URL=http://localhost:5172
-      - VITE_HOST_URL=http://localhost:5172
-      - VITE_HIDE_CHARTDB_CLOUD=false
-      - VITE_DISABLE_ANALYTICS=true
-      - VITE_AUTO_LOAD_JSON=true
-      - VITE_AUTO_LOAD_API_ENDPOINT=http://localhost:8000/api/drawdb 
-      - VITE_DATABASE_TYPE=postgresql
-      - VITE_AUTO_LOAD_SQL_API_ENDPOINT=http://localhost:8000/api/drawdb/sql
+    env_file:
+      - .env
     volumes:
       - ../:/app
       - ./entrypoint.sh:/usr/local/bin/entrypoint.sh

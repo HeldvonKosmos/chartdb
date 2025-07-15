@@ -10,4 +10,4 @@ RUN npm install --global yarn
 WORKDIR /app
 
 # Ports to use for dev
-EXPOSE 5172
+EXPOSE 5173
