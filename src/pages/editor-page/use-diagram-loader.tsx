@@ -30,29 +30,33 @@ export const useDiagramLoader = () => {
                     // Delete all cached diagrams
                     const diagramsToDelete = await listDiagrams();
                     if (diagramsToDelete.length > 0) {
-                        await Promise.all(diagramsToDelete.map(d => deleteDiagram(d.id)));
+                        await Promise.all(
+                            diagramsToDelete.map((d) => deleteDiagram(d.id))
+                        );
                     }
                     // Get json from backend to add diagrams
                     const response = await fetch(AUTO_LOAD_API_ENDPOINT);
                     if (!response.ok) {
-                        throw new Error(`API request failed: ${response.statusText}`);
+                        throw new Error(
+                            `API request failed: ${response.statusText}`
+                        );
                     }
                     const jsonString = await response.text();
                     const diagram = diagramFromJSONInput(jsonString);
 
                     // When auto-loading, remove schema information to simplify the view.
-                    diagram.tables?.forEach(table => {
+                    diagram.tables?.forEach((table) => {
                         table.schema = undefined;
                     });
-                    diagram.relationships?.forEach(rel => {
+                    diagram.relationships?.forEach((rel) => {
                         rel.sourceSchema = undefined;
                         rel.targetSchema = undefined;
                     });
-                    diagram.dependencies?.forEach(dep => {
+                    diagram.dependencies?.forEach((dep) => {
                         dep.schema = undefined;
                         dep.dependentSchema = undefined;
                     });
-                    diagram.customTypes?.forEach(ct => {
+                    diagram.customTypes?.forEach((ct) => {
                         ct.schema = undefined;
                     });
 
@@ -62,7 +66,10 @@ export const useDiagramLoader = () => {
                     setInitialDiagram(init_diagram);
                     //navigate(`/diagrams/${diagram.id}`);
                 } catch (error) {
-                    console.error('Failed to auto-load diagram from JSON API:', error);
+                    console.error(
+                        'Failed to auto-load diagram from JSON API:',
+                        error
+                    );
                     openCreateDiagramDialog({ canClose: false });
                 }
                 return;

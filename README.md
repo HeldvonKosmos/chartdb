@@ -106,23 +106,17 @@ docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 ghcr.io/chartdb/chart
 
 ```bash
 docker build -t chartdb .
-docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 chartdb
-```
-
-#### Using Custom Inference Server
-
-```bash
-# Build
-docker build \
-  --build-arg VITE_OPENAI_API_ENDPOINT=<YOUR_ENDPOINT> \
-  --build-arg VITE_LLM_MODEL_NAME=<YOUR_MODEL_NAME> \
-  -t chartdb .
-
-# Run
-docker run \
-  -e OPENAI_API_ENDPOINT=<YOUR_ENDPOINT> \
-  -e LLM_MODEL_NAME=<YOUR_MODEL_NAME> \
-  -p 8080:80 chartdb
+docker run -p 8080:80 \
+  -e VITE_OPENAI_API_KEY="your_openai_api_key_here" \
+  -e VITE_OPENAI_API_ENDPOINT="https://api.openai.com/v1" \
+  -e VITE_LLM_MODEL_NAME="gpt-3.5-turbo" \
+  -e VITE_HIDE_CHARTDB_CLOUD="false" \
+  -e VITE_DISABLE_ANALYTICS="true" \
+  -e VITE_AUTO_LOAD_JSON="true" \
+  -e VITE_AUTO_LOAD_API_ENDPOINT="http://127.0.0.1:8000/api/drawdb" \
+  -e VITE_DATABASE_TYPE="postgresql" \
+  --name chartdb-pod \
+  localhost/chartdb:latest
 ```
 
 > **Privacy Note:** ChartDB includes privacy-focused analytics via Fathom Analytics. You can disable this by adding `-e DISABLE_ANALYTICS=true` to the run command or `--build-arg VITE_DISABLE_ANALYTICS=true` when building.

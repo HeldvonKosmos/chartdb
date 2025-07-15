@@ -149,25 +149,25 @@ export const Menu: React.FC<MenuProps> = () => {
     const emojiAI = '✨';
 
     return (
-        <Menubar className="py-2 h-8 border-none shadow-none md:h-10 md:py-0">
+        <Menubar className="h-8 border-none py-2 shadow-none md:h-10 md:py-0">
             <MenubarMenu>
                 <MenubarTrigger>{t('menu.file.file')}</MenubarTrigger>
                 <MenubarContent>
                     {!AUTO_LOAD_JSON && (
                         <>
-                        <MenubarItem onClick={createNewDiagram}>
-                            {t('menu.file.new')}
-                        </MenubarItem>
-                        <MenubarItem onClick={openDiagram}>
-                            {t('menu.file.open')}
-                            <MenubarShortcut>
-                                {
-                                    keyboardShortcutsForOS[
-                                        KeyboardShortcutAction.OPEN_DIAGRAM
-                                    ].keyCombinationLabel
-                                }
-                            </MenubarShortcut>
-                        </MenubarItem>
+                            <MenubarItem onClick={createNewDiagram}>
+                                {t('menu.file.new')}
+                            </MenubarItem>
+                            <MenubarItem onClick={openDiagram}>
+                                {t('menu.file.open')}
+                                <MenubarShortcut>
+                                    {
+                                        keyboardShortcutsForOS[
+                                            KeyboardShortcutAction.OPEN_DIAGRAM
+                                        ].keyCombinationLabel
+                                    }
+                                </MenubarShortcut>
+                            </MenubarItem>
                         </>
                     )}
                     <MenubarItem onClick={saveDiagram}>
@@ -182,159 +182,189 @@ export const Menu: React.FC<MenuProps> = () => {
                     </MenubarItem>
                     {!AUTO_LOAD_JSON && (
                         <>
-                        <MenubarSeparator />
-                        <MenubarSub>
-                            <MenubarSubTrigger>
-                                {t('menu.file.import')}
-                            </MenubarSubTrigger>
-                            <MenubarSubContent>
-                                <MenubarItem onClick={openImportDiagramDialog}>
-                                    .json
-                                </MenubarItem>
-                                <MenubarItem onClick={() => openImportDBMLDialog()}>
-                                    .dbml
-                                </MenubarItem>
-                                <MenubarSeparator />
-                                <MenubarItem
-                                    onClick={() =>
-                                        openImportDatabaseDialog({
-                                            databaseType: DatabaseType.POSTGRESQL,
-                                        })
-                                    }
-                                >
-                                    {databaseTypeToLabelMap['postgresql']}
-                                </MenubarItem>
-                                <MenubarItem
-                                    onClick={() =>
-                                        openImportDatabaseDialog({
-                                            databaseType: DatabaseType.MYSQL,
-                                        })
-                                    }
-                                >
-                                    {databaseTypeToLabelMap['mysql']}
-                                </MenubarItem>
-                                <MenubarItem
-                                    onClick={() =>
-                                        openImportDatabaseDialog({
-                                            databaseType: DatabaseType.SQL_SERVER,
-                                        })
-                                    }
-                                >
-                                    {databaseTypeToLabelMap['sql_server']}
-                                </MenubarItem>
-                                <MenubarItem
-                                    onClick={() =>
-                                        openImportDatabaseDialog({
-                                            databaseType: DatabaseType.MARIADB,
-                                        })
-                                    }
-                                >
-                                    {databaseTypeToLabelMap['mariadb']}
-                                </MenubarItem>
-                                <MenubarItem
-                                    onClick={() =>
-                                        openImportDatabaseDialog({
-                                            databaseType: DatabaseType.SQLITE,
-                                        })
-                                    }
-                                >
-                                    {databaseTypeToLabelMap['sqlite']}
-                                </MenubarItem>
-                                <MenubarItem
-                                    onClick={() =>
-                                        openImportDatabaseDialog({
-                                            databaseType: DatabaseType.ORACLE,
-                                        })
-                                    }
-                                >
-                                    {databaseTypeToLabelMap['oracle']}
-                                </MenubarItem>
-                            </MenubarSubContent>
-                        </MenubarSub>
-                        <MenubarSeparator />
-                        <MenubarSub>
-                            <MenubarSubTrigger>
-                                {t('menu.file.export_sql')}
-                            </MenubarSubTrigger>
-                            <MenubarSubContent>
-                                {databaseType === DatabaseType.GENERIC ? (
+                            <MenubarSeparator />
+                            <MenubarSub>
+                                <MenubarSubTrigger>
+                                    {t('menu.file.import')}
+                                </MenubarSubTrigger>
+                                <MenubarSubContent>
+                                    <MenubarItem
+                                        onClick={openImportDiagramDialog}
+                                    >
+                                        .json
+                                    </MenubarItem>
+                                    <MenubarItem
+                                        onClick={() => openImportDBMLDialog()}
+                                    >
+                                        .dbml
+                                    </MenubarItem>
+                                    <MenubarSeparator />
                                     <MenubarItem
                                         onClick={() =>
-                                            exportSQL(DatabaseType.GENERIC)
-                                        }
-                                    >
-                                        {databaseTypeToLabelMap['generic']}
-                                    </MenubarItem>
-                                ) : null}
-                                {databaseType !== DatabaseType.GENERIC ? (
-                                    <MenubarItem
-                                        onClick={() => exportSQL(databaseType)}
-                                    >
-                                        {databaseTypeToLabelMap[databaseType]}
-                                    </MenubarItem>
-                                ) : null}
-                                {databaseType !== DatabaseType.POSTGRESQL ? (
-                                    <MenubarItem
-                                        onClick={() =>
-                                            exportSQL(DatabaseType.POSTGRESQL)
+                                            openImportDatabaseDialog({
+                                                databaseType:
+                                                    DatabaseType.POSTGRESQL,
+                                            })
                                         }
                                     >
                                         {databaseTypeToLabelMap['postgresql']}
-                                        <MenubarShortcut className="text-base">
-                                            {emojiAI}
-                                        </MenubarShortcut>
                                     </MenubarItem>
-                                ) : null}
-                                {databaseType !== DatabaseType.MYSQL ? (
                                     <MenubarItem
                                         onClick={() =>
-                                            exportSQL(DatabaseType.MYSQL)
+                                            openImportDatabaseDialog({
+                                                databaseType:
+                                                    DatabaseType.MYSQL,
+                                            })
                                         }
                                     >
                                         {databaseTypeToLabelMap['mysql']}
-                                        <MenubarShortcut className="text-base">
-                                            {emojiAI}
-                                        </MenubarShortcut>
                                     </MenubarItem>
-                                ) : null}
-                                {databaseType !== DatabaseType.SQL_SERVER ? (
                                     <MenubarItem
                                         onClick={() =>
-                                            exportSQL(DatabaseType.SQL_SERVER)
+                                            openImportDatabaseDialog({
+                                                databaseType:
+                                                    DatabaseType.SQL_SERVER,
+                                            })
                                         }
                                     >
                                         {databaseTypeToLabelMap['sql_server']}
-                                        <MenubarShortcut className="text-base">
-                                            {emojiAI}
-                                        </MenubarShortcut>
                                     </MenubarItem>
-                                ) : null}
-                                {databaseType !== DatabaseType.MARIADB ? (
                                     <MenubarItem
                                         onClick={() =>
-                                            exportSQL(DatabaseType.MARIADB)
+                                            openImportDatabaseDialog({
+                                                databaseType:
+                                                    DatabaseType.MARIADB,
+                                            })
                                         }
                                     >
                                         {databaseTypeToLabelMap['mariadb']}
-                                        <MenubarShortcut className="text-base">
-                                            {emojiAI}
-                                        </MenubarShortcut>
                                     </MenubarItem>
-                                ) : null}
-                                {databaseType !== DatabaseType.SQLITE ? (
                                     <MenubarItem
                                         onClick={() =>
-                                            exportSQL(DatabaseType.SQLITE)
+                                            openImportDatabaseDialog({
+                                                databaseType:
+                                                    DatabaseType.SQLITE,
+                                            })
                                         }
                                     >
                                         {databaseTypeToLabelMap['sqlite']}
-                                        <MenubarShortcut className="text-base">
-                                            {emojiAI}
-                                        </MenubarShortcut>
                                     </MenubarItem>
-                                ) : null}
-                            </MenubarSubContent>
-                        </MenubarSub>
+                                    <MenubarItem
+                                        onClick={() =>
+                                            openImportDatabaseDialog({
+                                                databaseType:
+                                                    DatabaseType.ORACLE,
+                                            })
+                                        }
+                                    >
+                                        {databaseTypeToLabelMap['oracle']}
+                                    </MenubarItem>
+                                </MenubarSubContent>
+                            </MenubarSub>
+                            <MenubarSeparator />
+                            <MenubarSub>
+                                <MenubarSubTrigger>
+                                    {t('menu.file.export_sql')}
+                                </MenubarSubTrigger>
+                                <MenubarSubContent>
+                                    {databaseType === DatabaseType.GENERIC ? (
+                                        <MenubarItem
+                                            onClick={() =>
+                                                exportSQL(DatabaseType.GENERIC)
+                                            }
+                                        >
+                                            {databaseTypeToLabelMap['generic']}
+                                        </MenubarItem>
+                                    ) : null}
+                                    {databaseType !== DatabaseType.GENERIC ? (
+                                        <MenubarItem
+                                            onClick={() =>
+                                                exportSQL(databaseType)
+                                            }
+                                        >
+                                            {
+                                                databaseTypeToLabelMap[
+                                                    databaseType
+                                                ]
+                                            }
+                                        </MenubarItem>
+                                    ) : null}
+                                    {databaseType !==
+                                    DatabaseType.POSTGRESQL ? (
+                                        <MenubarItem
+                                            onClick={() =>
+                                                exportSQL(
+                                                    DatabaseType.POSTGRESQL
+                                                )
+                                            }
+                                        >
+                                            {
+                                                databaseTypeToLabelMap[
+                                                    'postgresql'
+                                                ]
+                                            }
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
+                                        </MenubarItem>
+                                    ) : null}
+                                    {databaseType !== DatabaseType.MYSQL ? (
+                                        <MenubarItem
+                                            onClick={() =>
+                                                exportSQL(DatabaseType.MYSQL)
+                                            }
+                                        >
+                                            {databaseTypeToLabelMap['mysql']}
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
+                                        </MenubarItem>
+                                    ) : null}
+                                    {databaseType !==
+                                    DatabaseType.SQL_SERVER ? (
+                                        <MenubarItem
+                                            onClick={() =>
+                                                exportSQL(
+                                                    DatabaseType.SQL_SERVER
+                                                )
+                                            }
+                                        >
+                                            {
+                                                databaseTypeToLabelMap[
+                                                    'sql_server'
+                                                ]
+                                            }
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
+                                        </MenubarItem>
+                                    ) : null}
+                                    {databaseType !== DatabaseType.MARIADB ? (
+                                        <MenubarItem
+                                            onClick={() =>
+                                                exportSQL(DatabaseType.MARIADB)
+                                            }
+                                        >
+                                            {databaseTypeToLabelMap['mariadb']}
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
+                                        </MenubarItem>
+                                    ) : null}
+                                    {databaseType !== DatabaseType.SQLITE ? (
+                                        <MenubarItem
+                                            onClick={() =>
+                                                exportSQL(DatabaseType.SQLITE)
+                                            }
+                                        >
+                                            {databaseTypeToLabelMap['sqlite']}
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
+                                        </MenubarItem>
+                                    ) : null}
+                                </MenubarSubContent>
+                            </MenubarSub>
                         </>
                     )}
                     <MenubarSub>
@@ -347,34 +377,40 @@ export const Menu: React.FC<MenuProps> = () => {
                             <MenubarItem onClick={exportSVG}>SVG</MenubarItem>
                             {!AUTO_LOAD_JSON && (
                                 <>
-                                <MenubarSeparator />
-                                <MenubarItem onClick={openExportDiagramDialog}>
-                                    JSON
-                                </MenubarItem>
+                                    <MenubarSeparator />
+                                    <MenubarItem
+                                        onClick={openExportDiagramDialog}
+                                    >
+                                        JSON
+                                    </MenubarItem>
                                 </>
                             )}
                         </MenubarSubContent>
                     </MenubarSub>
                     {!AUTO_LOAD_JSON && (
                         <>
-                        <MenubarSeparator />
-                        <MenubarItem
-                            onClick={() =>
-                                showAlert({
-                                    title: t('delete_diagram_alert.title'),
-                                    description: t(
-                                        'delete_diagram_alert.description'
-                                    ),
-                                    actionLabel: t('delete_diagram_alert.delete'),
-                                    closeLabel: t('delete_diagram_alert.cancel'),
-                                    onAction: handleDeleteDiagramAction,
-                                })
-                            }
-                        >
-                            {t('menu.file.delete_diagram')}
-                        </MenubarItem>
-                        <MenubarSeparator />
-                        <MenubarItem>{t('menu.file.exit')}</MenubarItem>
+                            <MenubarSeparator />
+                            <MenubarItem
+                                onClick={() =>
+                                    showAlert({
+                                        title: t('delete_diagram_alert.title'),
+                                        description: t(
+                                            'delete_diagram_alert.description'
+                                        ),
+                                        actionLabel: t(
+                                            'delete_diagram_alert.delete'
+                                        ),
+                                        closeLabel: t(
+                                            'delete_diagram_alert.cancel'
+                                        ),
+                                        onAction: handleDeleteDiagramAction,
+                                    })
+                                }
+                            >
+                                {t('menu.file.delete_diagram')}
+                            </MenubarItem>
+                            <MenubarSeparator />
+                            <MenubarItem>{t('menu.file.exit')}</MenubarItem>
                         </>
                     )}
                 </MenubarContent>
@@ -404,22 +440,26 @@ export const Menu: React.FC<MenuProps> = () => {
                     </MenubarItem>
                     {!AUTO_LOAD_JSON && (
                         <>
-                        <MenubarSeparator />
-                        <MenubarItem
-                            onClick={() =>
-                                showAlert({
-                                    title: t('clear_diagram_alert.title'),
-                                    description: t(
-                                        'clear_diagram_alert.description'
-                                    ),
-                                    actionLabel: t('clear_diagram_alert.clear'),
-                                    closeLabel: t('clear_diagram_alert.cancel'),
-                                    onAction: clearDiagramData,
-                                })
-                            }
-                        >
-                            {t('menu.edit.clear')}
-                        </MenubarItem>
+                            <MenubarSeparator />
+                            <MenubarItem
+                                onClick={() =>
+                                    showAlert({
+                                        title: t('clear_diagram_alert.title'),
+                                        description: t(
+                                            'clear_diagram_alert.description'
+                                        ),
+                                        actionLabel: t(
+                                            'clear_diagram_alert.clear'
+                                        ),
+                                        closeLabel: t(
+                                            'clear_diagram_alert.cancel'
+                                        ),
+                                        onAction: clearDiagramData,
+                                    })
+                                }
+                            >
+                                {t('menu.edit.clear')}
+                            </MenubarItem>
                         </>
                     )}
                 </MenubarContent>
@@ -481,7 +521,7 @@ export const Menu: React.FC<MenuProps> = () => {
                     </MenubarSub>
                     <MenubarSeparator />
                     <MenubarSub>
-                        <MenubarSubTrigger className="flex gap-1 items-center">
+                        <MenubarSubTrigger className="flex items-center gap-1">
                             <span>{t('menu.view.theme')}</span>
                             <div className="flex-1" />
                             <MenubarShortcut>
@@ -517,17 +557,19 @@ export const Menu: React.FC<MenuProps> = () => {
             </MenubarMenu>
             {!AUTO_LOAD_JSON && (
                 <>
-                <MenubarMenu>
-                    <MenubarTrigger>{t('menu.backup.backup')}</MenubarTrigger>
-                    <MenubarContent>
-                        <MenubarItem onClick={openExportDiagramDialog}>
-                            {t('menu.backup.export_diagram')}
-                        </MenubarItem>
-                        <MenubarItem onClick={openImportDiagramDialog}>
-                            {t('menu.backup.restore_diagram')}
-                        </MenubarItem>
-                    </MenubarContent>
-                </MenubarMenu>
+                    <MenubarMenu>
+                        <MenubarTrigger>
+                            {t('menu.backup.backup')}
+                        </MenubarTrigger>
+                        <MenubarContent>
+                            <MenubarItem onClick={openExportDiagramDialog}>
+                                {t('menu.backup.export_diagram')}
+                            </MenubarItem>
+                            <MenubarItem onClick={openImportDiagramDialog}>
+                                {t('menu.backup.restore_diagram')}
+                            </MenubarItem>
+                        </MenubarContent>
+                    </MenubarMenu>
                 </>
             )}
             <MenubarMenu>
