@@ -36,4 +36,6 @@ sed -i "s|__VITE_AUTO_LOAD_SQL_API_ENDPOINT__|${VITE_AUTO_LOAD_SQL_API_ENDPOINT}
 echo "✅ public/config.js wurde erfolgreich generiert."
 
 # Starte den Nginx-Server im Vordergrund
+sed -i 's/listen\s\+80;/listen 8080;/g' /etc/nginx/conf.d/default.conf
+echo "NGINX wird auf Port 8080 gestartet..."
 exec nginx -g 'daemon off;'
