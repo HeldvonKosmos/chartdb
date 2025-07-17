@@ -2,6 +2,9 @@
 // Dies ist die Vorlage für die Konfiguration.
 // Die Platzhalter werden durch ein Skript ersetzt.
 
+// Possible Options for VITE_DATABASE_TYPE
+// generic, postgresql, mysql, sql_server, mariadb, sqlite, clickhouse, cockroachdb, oracle
+
 window.env = {
     VITE_OPENAI_API_KEY: '__VITE_OPENAI_API_KEY__',
     VITE_OPENAI_API_ENDPOINT: '__VITE_OPENAI_API_ENDPOINT__',
